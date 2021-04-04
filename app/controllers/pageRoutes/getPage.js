@@ -9,11 +9,22 @@ const getPage = async (req, res) => {
 	let key = "_id";
 	let query = {};
 
-	const pageNumber = req.query.pageNumber;
+	const pageNumber = req.query.page;
 	const perPage = req.query.per_page;
+	
+	
+	// Do a sanity check in case no query was passed in
+	// 		First remove the {page} and {per_page} queries because we dont count those as required queries
+	const temp = { ...req.query, page: undefined, per_page: undefined }
+	// 		Then delete any undefined values
+	Object.keys(temp).forEach((k) => temp[k] === undefined ? delete temp[k] : {});
+
+	// If there is no query left then complain
+	if (Object.keys(temp).length === 0 && temp.constructor === Object ) {
+		return res.status(400).json({message: "No query was provided. Please include a query like ?pageName=foo or ?_id=abc123"})
+	}
 
 	if (req.query._id) {
-		let key = "_id";
 		query = { _id: req.query._id };
 	}
 

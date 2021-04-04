@@ -126,12 +126,10 @@ const pageRouter = async (req, res) => {
 		}
 
 		default:
-			return res
-				.status(400)
-				.json({
-					message:
-						"Failed to update because the field isnt in the page model.",
-				});
+			return res.status(400).json({
+				message:
+					"Failed to update because the field isnt in the page model.",
+			});
 			break;
 	}
 };
